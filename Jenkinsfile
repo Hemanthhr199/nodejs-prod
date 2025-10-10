@@ -38,12 +38,12 @@ pipeline {
                                 sshTransfer(
                                     sourceFiles: '**/*',
                                     removePrefix: '',
-                                    remoteDirectory: '/home/ubuntu',
+                                    remoteDirectory: '',
                                     execCommand: '''
                                         # Kill any process using port 3000
                                         fuser -k 3000/tcp || true
 
-                                        cd /home/ubuntu
+                                    
                                         npm install --production
 
                                         nohup npm start > output.log 2>&1 &
