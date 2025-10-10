@@ -38,7 +38,7 @@ pipeline {
                                 sshTransfer(
                                     sourceFiles: '**/*',
                                     removePrefix: '',
-                                    remoteDirectory: '/home/ubuntu/node-app',
+                                    remoteDirectory: '/home/ubuntu',
                                     execCommand: '''
                                         # Kill any process using port 3000
                                         fuser -k 3000/tcp || true
