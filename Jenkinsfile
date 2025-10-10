@@ -64,3 +64,4 @@ pipeline {
             echo 'Build, test and deploy pipeline completed.'
         }
     }
+}
