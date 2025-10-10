@@ -25,11 +25,42 @@ pipeline {
                 sh 'npm test'
             }
         }
+        
+        stage('Deploy') {
+            steps {
+                echo 'Deploying to remote Ubuntu server...'
+
+                sshPublisher(
+                    publishers: [
+                        sshPublisherDesc(
+                            configName: 'ubuntu-server', // Your SSH config name in Jenkins
+                            transfers: [
+                                sshTransfer(
+                                    sourceFiles: '**/*',
+                                    removePrefix: '',
+                                    remoteDirectory: '/home/ubuntu/node-app',
+                                    execCommand: '''
+                                        # Kill any process using port 3000
+                                        fuser -k 3000/tcp || true
+
+                                        cd /home/ubuntu/node-app
+                                        npm install --production
+
+                                        nohup npm start > output.log 2>&1 &
+                                    '''
+                                )
+                            ],
+                            usePromotionTimestamp: false,
+                            verbose: true
+                        )
+                    ]
+                )
+            }
+        }
     }
 
     post {
         always {
-            echo 'Build and test pipeline completed.'
+            echo 'Build, test and deploy pipeline completed.'
         }
     }
-}
